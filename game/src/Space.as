@@ -14,19 +14,21 @@ package {
 			return m_draw_pallet;
 		}
 		
-		private var m_draw_pallet:Sprite = null;
+		internal var m_draw_pallet:Sprite = null;
 		
-		private var m_all_objects:Vector.<SolidObject> = new Vector.<SolidObject>();
+		internal var m_all_objects:Vector.<SolidObject> = new Vector.<SolidObject>();
 		
-		private var m_mobile_objects:Vector.<SolidObject> = new Vector.<SolidObject>();
+		internal var m_mobile_objects:Vector.<SolidObject> = new Vector.<SolidObject>();
 		
-		private var m_significant_objects:Vector.<SolidObject> = new Vector.<SolidObject>();
+		internal var m_significant_objects:Vector.<SolidObject> = new Vector.<SolidObject>();
 		
-		private var m_collision_lists:Dictionary = new Dictionary();
+		internal var m_colliders:Vector.<SolidObject> = new Vector.<SolidObject>();
 		
-		private var m_colliders:Vector.<SolidObject> = new Vector.<SolidObject>();
+		internal var m_collision_lists:Dictionary = new Dictionary();
 		
-		private var m_destroyed_objects:Dictionary = new Dictionary();
+		internal var m_destroyed_objects:Dictionary = new Dictionary();
+		
+		internal var m_moved:int = 0;
 		
 		public function Space(draw_pallet:Sprite) {
 			m_draw_pallet = draw_pallet;
@@ -66,13 +68,13 @@ package {
 		private function on_frame(event:*):void {
 			var i:int = 0;
 			var j:int = 0;
-			
+			m_moved = 0;
 			for(; i < m_mobile_objects.length; i++) {
-				var first:SolidObject = m_all_objects[i];
+				var first:SolidObject = m_mobile_objects[i];
 				
 				
 				for(j = 0; j < m_significant_objects.length; j++) {
-					var second:SolidObject = m_all_objects[j];
+					var second:SolidObject = m_significant_objects[j];
 					if(first == second) continue;
 					
 					var d_pos_x:Number = second.newton.position.x - first.newton.position.x;
@@ -100,9 +102,9 @@ package {
 				first.newton.acceleration.x = first.well.net_force.x / first.well.mass;
 				first.newton.acceleration.y = first.well.net_force.y / first.well.mass;
 				
-				if(!first.well.fixed) {
-					first.newton.step(1.0);
-				}
+				m_moved++;
+				
+				first.newton.step(1.0);
 				
 				first.well.net_force.x = 0;
 				first.well.net_force.y = 0;
@@ -110,7 +112,7 @@ package {
 			
 			for each(var collider:SolidObject in m_colliders) {
 				for(var key:uint in  m_collision_lists) {
-					if( (key | collider.collides_with) != 0) {
+					if( (key & collider.collides_with) != 0) {
 						var list:Vector.<SolidObject> = m_collision_lists[key];
 						for each(var collidee:SolidObject in list) {
 							if(collidee != collider) {
@@ -137,10 +139,12 @@ package {
 				if(destroyed.well.significant) {
 					remove_from_list(destroyed, m_significant_objects);
 				}
-				delete m_destroyed_objects[destroyed];
+				
 				
 				destroyed.set_space(null);
+				
 			}
+			m_destroyed_objects = new Dictionary();
 		}
 		
 		public static function remove_from_list(object:*, list:*):void {

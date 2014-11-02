@@ -25,5 +25,11 @@ package {
 		public function get space():Space {
 			return m_space;
 		}
+		
+		public function destroy():void {
+			if(m_space) {
+				m_space.destroy(this);
+			}
+		}
 	}
 }

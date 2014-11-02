@@ -15,20 +15,27 @@ package {
 		
 		private var m_space_pallet:Sprite = new Sprite();
 		
+		public function get space():Space {
+			return m_space;
+		}
+		
 		public function Game() {
 			stage.align = StageAlign.TOP_LEFT;  // or StageAlign.TOP
 			stage.scaleMode = StageScaleMode.NO_SCALE;
 			
-			stage.addEventListener(MouseEvent.CLICK, on_click);
+			stage.addEventListener(MouseEvent.MOUSE_MOVE, on_click);
 			m_text.multiline = true;
 			m_text.selectable = false;
 			m_text.height = stage.stageHeight;
 			m_text.width = stage.stageWidth;
 			addChild(m_text);
-			trc("Start");
 			
 			make_pallet();
 			
+			
+			var debug:DebugSprite = new DebugSprite(this);
+			debug.alpha = 0.6;
+			addChild(debug);
 		}
 		
 		private function make_pallet():void {
@@ -38,6 +45,7 @@ package {
 			m_space_pallet = new Sprite();
 			addChild(m_space_pallet);
 			m_space = new Space(m_space_pallet);
+			
 			
 			generate_planets();
 		}
@@ -62,7 +70,7 @@ package {
 					tries = -1;
 					
 					var object:SolidObject = new SolidObject();
-					object.radius = Math.random() * 5 + 1;
+					object.radius = Math.random() * 100 + 25;
 					object.well.mass = object.radius * object.radius * 5;
 					object.well.fixed = true;
 					
@@ -75,11 +83,9 @@ package {
 			}
 		}
 		
-		private function trc(... args):void {
-			m_text.text = args.join(" ");
-		}
 		
 		private function on_click(event:MouseEvent):void {
+			if(!event.buttonDown) return;
 			for(var i:int = 0; i < 10; i++) {
 				var object:SolidObject = new SolidObject();
 				object.newton.position.x = stage.mouseX;

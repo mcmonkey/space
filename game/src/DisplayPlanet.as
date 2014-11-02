@@ -9,7 +9,7 @@ package {
 	
 	public class DisplayPlanet extends Sprite {
 	
-		public static const DISPLAY_RADIUS_RATIO:Number = 20;
+		public static const DISPLAY_RADIUS_RATIO:Number = 1;
 		
 		public static function unit_to_pixel(units:Number):Number {
 			return DISPLAY_RADIUS_RATIO * units;
@@ -32,8 +32,8 @@ package {
 			
 			this.solid_object = solid_object;
 			
-			solid_object.collision_state = CollisionBits.BIT_PLANET;
-			solid_object.collides_with = CollisionBits.NONE;
+			solid_object.collision_state |= CollisionBits.BIT_PLANET;
+			solid_object.collides_with |= CollisionBits.NONE;
 			solid_object.well.fixed = true;
 
 			request_redraw();
