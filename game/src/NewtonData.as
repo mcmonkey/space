@@ -2,12 +2,13 @@
 
 package {
 	import flash.geom.Point;
-	public class NewtonData {
+	public class NewtonData extends SpaceComponent implements IModelComponent {
 		public var position:Point = new Point();
 		public var velocity:Point = new Point();
 		public var acceleration:Point = new Point();
 		
-		public function step(dt:Number):void {
+		public function on_model_update():void {
+			var dt:Number = 1.0;
 			apply_delta(dt, velocity, position);
 			apply_delta(dt, acceleration, velocity);
 		}

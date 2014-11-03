@@ -23,7 +23,7 @@ package {
 			stage.align = StageAlign.TOP_LEFT;  // or StageAlign.TOP
 			stage.scaleMode = StageScaleMode.NO_SCALE;
 			
-			stage.addEventListener(MouseEvent.MOUSE_MOVE, on_click);
+			stage.addEventListener(MouseEvent.CLICK, on_click);
 			m_text.multiline = true;
 			m_text.selectable = false;
 			m_text.height = stage.stageHeight;
@@ -55,13 +55,13 @@ package {
 				var tries:int = 10;
 				try_loop:
 				while(tries-- > 0) {
-					var r:Number = Math.random() * 5 + 1;
+					var r:Number = Math.random() * 100 + 25;
 					var x:int = Math.random() * stage.stageWidth;
 					var y:int = Math.random() * stage.stageHeight;
 					var pixel_r:Number = DisplayPlanet.unit_to_pixel(r);
 					for each(var existing_planet:DisplayPlanet in planets) {
-						var dx:Number = x - existing_planet.solid_object.newton.position.x;
-						var dy:Number = y - existing_planet.solid_object.newton.position.y;
+						var dx:Number = x - existing_planet.newton.position.x;
+						var dy:Number = y - existing_planet.newton.position.y;
 						var distance:Number = pixel_r + existing_planet.pixel_radius(); 
 						if((dx * dx) + (dy * dy) < (distance * distance)) {
 							continue try_loop;
@@ -69,33 +69,30 @@ package {
 					}
 					tries = -1;
 					
-					var object:SolidObject = new SolidObject();
-					object.radius = Math.random() * 100 + 25;
-					object.well.mass = object.radius * object.radius * 5;
-					object.well.fixed = true;
+					var object:SpaceObject = new SpaceObject();
+					var planet:DisplayPlanet = object.add_controller(DisplayPlanet);
 					
-					object.newton.position.x = x;
-					object.newton.position.y = y;
-					var planet:DisplayPlanet = new DisplayPlanet(object);
+					planet.radius = r
+					planet.well.mass = r * r * 5;
+					
+					planet.newton.position.x = x;
+					planet.newton.position.y = y;
+					
 					planets.push(planet);
-					m_space.add_solid_object(object);
+					m_space.add_space_object(object);
 				}
 			}
 		}
 		
 		
 		private function on_click(event:MouseEvent):void {
-			if(!event.buttonDown) return;
-			for(var i:int = 0; i < 10; i++) {
-				var object:SolidObject = new SolidObject();
-				object.newton.position.x = stage.mouseX;
-				object.newton.position.y = stage.mouseY;
-				object.newton.velocity.x = Math.random() * 5  -2.5;
-				object.newton.velocity.y = Math.random() * 5  -2.5;
+			for(var i:int = 0; i < 1; i++) {
+				var object:SpaceObject = new SpaceObject();
+				var gun:DisplayGun = object.add_controller(DisplayGun);
+				gun.newton.position.x = stage.mouseX;
+				gun.newton.position.y = stage.mouseY;
 				
-				var bullet:DisplayBullet = new DisplayBullet(object);
-				
-				m_space.add_solid_object(object);
+				m_space.add_space_object(object);
 				
 			}
 		}

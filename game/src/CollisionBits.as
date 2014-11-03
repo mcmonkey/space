@@ -7,5 +7,6 @@ package {
 		
 		public static const BIT_PLANET:uint = 1 << 0;
 		public static const BIT_BULLET:uint = 1 << 1;
+		public static const BIT_WELL:uint = 1 << 2;
 	}
 }

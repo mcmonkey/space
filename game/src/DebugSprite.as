@@ -33,10 +33,7 @@ package {
 			var info:String = "";
 			info +=   "MEMORY: " + (System.privateMemory / 1024.0 / 1024.0).toPrecision(5);
 			info += "\nALL:    " + space.m_all_objects.length;
-			info += "\nMOBILE: " + space.m_mobile_objects.length;
-			info += "\nSIGNIF: " + space.m_significant_objects.length;
 			info += "\nCOLLID: " + space.m_colliders.length;
-			info += "\nMOVED:  " + space.m_moved;
 			
 			text.text = info;
 			text.width = text.textWidth + 10;

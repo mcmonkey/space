@@ -7,54 +7,65 @@ package {
 	import flash.events.Event;
 	import flash.geom.Point;
 	
-	public class DisplayPlanet extends Sprite {
+	public class DisplayPlanet extends SpaceComponent implements IVisualComponent {
 	
 		public static const DISPLAY_RADIUS_RATIO:Number = 1;
+		
 		
 		public static function unit_to_pixel(units:Number):Number {
 			return DISPLAY_RADIUS_RATIO * units;
 		}
 		
-		public var text_info:TextField = new TextField();
 		
 		public var shape:Shape = new Shape();
-		
-		public var solid_object:SolidObject;
-		
+				
 		private var m_needs_redraw:Boolean = false;
 		
-		public function DisplayPlanet(solid_object:SolidObject) {
+		public var r:Number = 1.0;
+		public var g:Number = 1.0;
+		public var b:Number = 1.0;
 		
-			solid_object.radius;
-			
-			addChild(shape);
-			addChild(text_info);
-			
-			this.solid_object = solid_object;
-			
-			solid_object.collision_state |= CollisionBits.BIT_PLANET;
-			solid_object.collides_with |= CollisionBits.NONE;
-			solid_object.well.fixed = true;
-
+		public var radius:Number;
+		
+		public var newton:NewtonData;
+		
+		public var well:GravityWell;
+		
+		public function DisplayPlanet() {
+			collision_state |= CollisionBits.BIT_PLANET;
+			collides_with |= CollisionBits.NONE;
+		}
+		
+		override protected function init():void {
+			well = require(GravityWell);
+			newton = require(NewtonData);
 			request_redraw();
-			
-			addEventListener(Event.ENTER_FRAME, on_enter_frame);
-			solid_object.addEventListener(SpaceObject.EVENT_ADDED_TO_SPACE, added);
-			solid_object.addEventListener(SpaceObject.EVENT_REMOVED_FROM_SPACE, removed);
+			space_object.addEventListener(SpaceObject.EVENT_ADDED_TO_SPACE, added);
+			space_object.addEventListener(SpaceObject.EVENT_REMOVED_FROM_SPACE, removed);
+		}
+		
+		public function add_color(color:uint):void {
+			var r:Number = ((color >>> 16) & 0xFF) / 255.0;
+			var g:Number = ((color >>> 8 ) & 0xFF) / 255.0;
+			var b:Number = ((color       ) & 0xFF) / 255.0;
+			this.r += r;
+			this.g += g;
+			this.b += b;
+			request_redraw();
 		}
 		
 		private function added(event:*):void {
-			solid_object.space.pallet.addChild(this);
+			space_object.space.pallet.addChild(shape);
 		}
 		
 		private function removed(event:*):void {
-			if(this.parent) {
-				this.parent.removeChild(this);
+			if(shape.parent) {
+				shape.parent.removeChild(shape);
 			}
 		}
 		
 		public function pixel_radius():Number {
-			return unit_to_pixel(solid_object.radius);
+			return unit_to_pixel(radius);
 		}
 		
 		public function request_redraw():void {
@@ -62,13 +73,21 @@ package {
 		}
 		
 		private function redraw():void {
+			var max:Number = Math.max(this.r, this.g, this.b);
+			
+			var r:Number,g:Number,b:Number;
+			r = 255 * this.r / max
+			g = 255 * this.g / max;
+			b = 255 * this.b / max;
+			
+			var color:uint = (uint(r) << 16) | (uint(g) << 8) | uint(b);
+			
+			
 			shape.graphics.clear();
-			shape.graphics.beginFill(0x00000000, 0.2);
+			shape.graphics.beginFill(color, 1);
+			shape.graphics.lineStyle(0, 1);
 			shape.graphics.drawCircle(0, 0, pixel_radius());
 			shape.graphics.endFill();
-			text_info.text = solid_object.well.mass.toPrecision(2);
-			text_info.x = -text_info.textWidth / 2;
-			
 		}
 		
 		private function check_redraw():void {
@@ -78,24 +97,11 @@ package {
 			}
 		}
 		
-		private function on_enter_frame(event:*):void {	
+		public function on_visual_update():void {	
 			check_redraw();
-			var pos:Point = solid_object.newton.position;
-			if(false && stage) {
-				if(pos.x < 0) {
-					pos.x = stage.stageWidth;
-				} else if(pos.x > stage.stageWidth) {
-					pos.x = 0;
-				}
-				if(pos.y < 0) {
-					pos.y = stage.stageHeight;
-				}
-				if(pos.y > stage.stageHeight) {
-					pos.y = 0;
-				}
-			}
-			this.x = pos.x;
-			this.y = pos.y;
+			var pos:Point = newton.position;
+			shape.x = pos.x;
+			shape.y = pos.y;
 		}
 	}
 }
