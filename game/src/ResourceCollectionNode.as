@@ -44,15 +44,12 @@ package {
 		
 		private function redraw():void {
 			var size:Number = 10;
-			var half_size:Number = size / 2;
-			var height:Number = Math.sqrt(size * size - half_size * half_size);
-			var half_height:Number = height / 2;
-			
 			var color:uint = faction.faction.color;
+			
 			with(shape.graphics) {
 				clear();
 				beginFill(color, 1);
-				lineStyle(0, color * .7);
+				lineStyle(2, color * .7);
 				drawCircle(0, 0, 10);
 				endFill();
 			}
