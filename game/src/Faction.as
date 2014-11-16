@@ -9,10 +9,13 @@ package {
 	public class Faction  {		
 		public var color:uint;
 		
+		public var second_color:uint;
+		
 		public var objects:Vector.<FactionOwned> = new Vector.<FactionOwned>();
 				
 		public function Faction() {
 			color = Math.random() * uint.MAX_VALUE;
+			second_color = Math.random();
 		}
 		
 	}

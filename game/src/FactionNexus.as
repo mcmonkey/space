@@ -39,7 +39,7 @@ package {
 			space_object.space.pallet.addChild(shape);
 			
 			var count:int = 3;
-			var radius:Number = CircleUtil.radius_for_radial_menu(count, 10, 10, SIZE * 1.1);
+			var radius:Number = CircleUtil.radius_for_radial_menu(count, ResourceCollectionNode.SIZE, ResourceCollectionNode.SIZE * 0.1, SIZE * 1.1);
 			for(var i:int = 0; i < count; i++) {
 				var node:ResourceCollectionNode = SpaceObject.construct(ResourceCollectionNode);
 				var pos_data:PositionData = node.object.get_controller(PositionData);
@@ -49,7 +49,6 @@ package {
 				var position:Point = CircleUtil.even_point(i, count, radius);
 				with(pos_data.position) {
 					setTo(position.x + this.position.position.x, position.y + this.position.position.y);
-					trace(position, radius);
 				}
 				space_object.space.add_space_object(node.object);
 			}

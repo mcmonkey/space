@@ -43,18 +43,22 @@ package {
 		
 		
 		private function redraw():void {
-			var size:Number = 10;
-			var color:uint = faction.faction.color;
+			draw(shape, faction.faction);
 			
+		}
+		
+		public static const SIZE:Number = 5;
+		
+		public static function draw(shape:Shape, faction:Faction):void {
 			with(shape.graphics) {
 				clear();
-				beginFill(color, 1);
-				lineStyle(2, color * .7);
-				drawCircle(0, 0, 10);
+				beginFill(faction.color, 1);
+				lineStyle(2, faction.second_color);
+				drawCircle(0, 0, SIZE);
 				endFill();
 			}
 		}
-		
+				
 		public function on_visual_update():void {	
 			with(position.position) {
 				shape.x = x;
