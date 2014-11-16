@@ -14,6 +14,8 @@ package {
 		
 		private var m_controllers:Dictionary = new Dictionary();
 		
+		private var m_colliding_controllers:Vector.<SpaceComponent> = new Vector.<SpaceComponent>();
+		
 		internal var visuals:Vector.<IVisualComponent> = new Vector.<IVisualComponent>();
 		
 		internal var models:Vector.<IModelComponent> = new Vector.<IModelComponent>();
@@ -27,6 +29,9 @@ package {
 				var component:SpaceComponent = new clazz();
 				m_controllers[clazz] = component;
 				component.init_internal(this);
+				if(component.collides_with != 0) {
+					m_colliding_controllers.push(component);
+				}
 			}
 			return m_controllers[clazz];
 		}
@@ -46,7 +51,7 @@ package {
 		}
 		
 		internal function collide(collidee:SpaceObject, bits:uint):void {
-			for each(var component:SpaceComponent in m_controllers) {
+			for each(var component:SpaceComponent in m_colliding_controllers) {
 				if((bits & component.collides_with) != 0) {
 					component.collide(collidee);
 				}
