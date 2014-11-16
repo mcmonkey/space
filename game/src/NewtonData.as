@@ -3,9 +3,20 @@
 package {
 	import flash.geom.Point;
 	public class NewtonData extends SpaceComponent implements IModelComponent {
-		public var position:Point = new Point();
+		
+		
 		public var velocity:Point = new Point();
 		public var acceleration:Point = new Point();
+		
+		private var m_position_data:PositionData;
+		
+		public function get position():Point {
+			return m_position_data.position;
+		}
+		
+		override protected function init():void {
+			m_position_data = require(PositionData);
+		}
 		
 		public function on_model_update():void {
 			var dt:Number = 1.0;
