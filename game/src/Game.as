@@ -84,12 +84,12 @@ package {
 		
 		private function on_click(event:MouseEvent):void {
 			for(var i:int = 0; i < 1; i++) {
-				var object:SpaceObject = new SpaceObject();
-				var gun:DisplayGun = object.add_controller(DisplayGun);
-				gun.newton.position.x = stage.mouseX;
-				gun.newton.position.y = stage.mouseY;
+				//var object:SpaceObject = new SpaceObject();
+				//var gun:DisplayGun = object.add_controller(DisplayGun);
+				//gun.newton.position.x = stage.mouseX;
+				//gun.newton.position.y = stage.mouseY;
 				
-				m_space.add_space_object(object);
+				//m_space.add_space_object(object);
 				
 			}
 		}
