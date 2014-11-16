@@ -51,7 +51,7 @@ package {
 		}
 		private function generate_resource_nodes():void {
 			var resources:Vector.<ResourceNode> = new Vector.<ResourceNode>();
-			for(var i:int = 0; i < 35; i++) {
+			for(var i:int = 0; i < 100; i++) {
 				var tries:int = 10;
 				try_loop:
 				while(tries-- > 0) {

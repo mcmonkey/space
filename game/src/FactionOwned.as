@@ -15,5 +15,18 @@ package {
 			m_faction.objects.push(this);
 		}
 		
+		override protected function init():void {
+			
+			space_object.addEventListener(SpaceObject.EVENT_ADDED_TO_SPACE, added);
+			space_object.addEventListener(SpaceObject.EVENT_REMOVED_FROM_SPACE, removed);
+		}
+		
+		private function added(event:*):void {
+			faction.add(this);
+		}
+		
+		private function removed(event:*):void {
+			faction.remove(this);
+		}
 	}
 }

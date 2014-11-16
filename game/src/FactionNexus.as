@@ -30,6 +30,8 @@ package {
 			faction = require(FactionOwned);
 			faction.faction = new Faction();
 			
+			require(Obstacle);
+			
 			redraw();
 			space_object.addEventListener(SpaceObject.EVENT_ADDED_TO_SPACE, added);
 			space_object.addEventListener(SpaceObject.EVENT_REMOVED_FROM_SPACE, removed);
@@ -37,6 +39,8 @@ package {
 		
 		private function added(event:*):void {
 			space_object.space.pallet.addChild(shape);
+			
+			space_object.get_controller(Obstacle).radius = SIZE;
 			
 			var count:int = 3;
 			var radius:Number = CircleUtil.radius_for_radial_menu(count, ResourceCollectionNode.SIZE, ResourceCollectionNode.SIZE * 0.1, SIZE * 1.1);
@@ -52,6 +56,12 @@ package {
 				}
 				space_object.space.add_space_object(node.object);
 			}
+			
+			var drone:ConstructionDrone = SpaceObject.construct(ConstructionDrone);
+			drone.faction.faction = this.faction.faction;
+			pos_data = drone.object.get_controller(PositionData);
+			pos_data.position.setTo(this.position.position.x, this.position.position.y);
+			space_object.space.add_space_object(drone.object);
 		}
 		
 		private function removed(event:*):void {

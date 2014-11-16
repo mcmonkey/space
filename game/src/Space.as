@@ -40,17 +40,14 @@ package {
 			
 			m_all_objects.push(space_object);
 			
-			if(m_collision_lists[space_object.collision_state] == null) {
-				m_collision_lists[space_object.collision_state] = new Vector.<SpaceObject>();
-			}
-			m_collision_lists[space_object.collision_state].push(space_object);
+			DictionaryUtil.get_or_create(m_collision_lists, space_object.collision_state, Class(Vector.<SpaceObject>)).push(space_object);
 			
 			if(space_object.collides_with != 0) {
 				m_colliders.push(space_object);
 			}
 			
 			for each(var tag:* in space_object.tags) {
-				DictionaryUtil.add_or_create(tags, tag, Class(Vector.<SpaceObject>)).push(space_object);
+				DictionaryUtil.get_or_create(tags, tag, Class(Vector.<SpaceObject>)).push(space_object);
 			}
 			
 			space_object.set_space(this);

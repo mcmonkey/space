@@ -19,6 +19,8 @@ package {
 		
 		
 		private var shape:Shape = new Shape();
+		
+		private var sprite:Sprite = new Sprite();
 			
 		private var m_needs_redraw:Boolean = false;
 		
@@ -33,6 +35,12 @@ package {
 		
 		override protected function init():void {
 			position = require(PositionData);
+			var id:int = require(Obstacle).id;
+			var txt:TextField = new TextField();
+			sprite.addChild(shape);
+			sprite.addChild(txt);
+			txt.text = id.toString();
+			
 			request_redraw();
 			space_object.addEventListener(SpaceObject.EVENT_ADDED_TO_SPACE, added);
 			space_object.addEventListener(SpaceObject.EVENT_REMOVED_FROM_SPACE, removed);
@@ -43,12 +51,13 @@ package {
 		}
 		
 		private function added(event:*):void {
-			space_object.space.pallet.addChild(shape);
+			space_object.space.pallet.addChild(sprite);
+			space_object.get_controller(Obstacle).radius = pixel_radius();
 		}
 		
 		private function removed(event:*):void {
-			if(shape.parent) {
-				shape.parent.removeChild(shape);
+			if(sprite.parent) {
+				sprite.parent.removeChild(sprite);
 			}
 		}
 		
@@ -92,8 +101,8 @@ package {
 			check_redraw();
 			
 			with(position.position) {
-				shape.x = x;
-				shape.y = y;
+				sprite.x = x;
+				sprite.y = y;
 			}
 		}
 	}

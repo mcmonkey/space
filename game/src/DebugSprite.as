@@ -34,6 +34,8 @@ package {
 			info +=   "MEMORY: " + (System.privateMemory / 1024.0 / 1024.0).toPrecision(5);
 			info += "\nALL:    " + space.m_all_objects.length;
 			info += "\nCOLLID: " + space.m_colliders.length;
+			info += "\nMOUSE_X:" + stage.mouseX;
+			info += "\nMOUSE_Y:" + stage.mouseY;
 			
 			text.text = info;
 			text.width = text.textWidth + 10;
