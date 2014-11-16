@@ -34,7 +34,7 @@ package {
 				if(component.collides_with != 0) {
 					m_colliding_controllers.push(component);
 				}
-				component.add_tag(clazz);
+				tags[clazz] = clazz;
 				for(var tag:* in component.tags) {
 					tags[tag] = tag;
 				}

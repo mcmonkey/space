@@ -1,5 +1,5 @@
 package util {
-	import flash.util.Dictionary;
+	import flash.utils.Dictionary;
 	
 	public class DictionaryUtil {
 		public static function add_or_create(dictionary:Dictionary, key:*, type:Class):* {

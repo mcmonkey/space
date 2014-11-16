@@ -1,4 +1,6 @@
 package {
+	import flash.utils.Dictionary;
+	
 	public class SpaceComponent {
 		public var collides_with:uint;
 		public var collision_state:uint;
