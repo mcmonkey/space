@@ -24,6 +24,8 @@ package {
 		
 		public var collides_with:uint;
 		
+		internal var tags:Dictionary = new Dictionary();
+		
 		public function add_controller(clazz:Class):* {
 			if(!(clazz in m_controllers)) {
 				var component:SpaceComponent = new clazz();
@@ -31,6 +33,9 @@ package {
 				component.init_internal(this);
 				if(component.collides_with != 0) {
 					m_colliding_controllers.push(component);
+				}
+				for(var tag:String in component.tags) {
+					tags[tag] = tag;
 				}
 			}
 			return m_controllers[clazz];

@@ -25,6 +25,8 @@ package {
 		
 		internal var m_destroyed_objects:Dictionary = new Dictionary();
 				
+		internal var tags:Dictionary = new Dictionary();
+		
 		public function Space(draw_pallet:Sprite) {
 			m_draw_pallet = draw_pallet;
 			m_draw_pallet.addEventListener(Event.EXIT_FRAME, on_frame);
@@ -47,7 +49,15 @@ package {
 				m_colliders.push(space_object);
 			}
 			
+			for each(var tag:String in space_object.tags) {
+				DictionaryUtil.add_or_create(tags, tag, Class(Vector.<SpaceObject>)).push(space_object);
+			}
+			
 			space_object.set_space(this);
+		}
+		
+		public function get_by_tag(tag:String):Vector.<SpaceObject> {
+			return tags[tag];
 		}
 		
 		public function destroy(space_object:SpaceObject):void {
@@ -82,6 +92,9 @@ package {
 			for(var destroyed:SpaceObject in m_destroyed_objects) {
 				remove_from_list(destroyed, m_collision_lists[destroyed.collision_state]);
 				remove_from_list(destroyed, m_all_objects);
+				for each(var tag:String in destroyed.tags) {
+					remove_from_list(destroyed, tags[tag]);
+				}
 				if(destroyed.collides_with) {
 					remove_from_list(destroyed, m_colliders);	
 				}

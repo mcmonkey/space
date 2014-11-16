@@ -7,6 +7,8 @@ package {
 		
 		private var m_initialized:Boolean = false;
 		
+		internal var tags:Dictionary = new Dictionary();
+		
 		internal final function init_internal(space_object:SpaceObject):void {
 			if(space_object.space) throw new Error("Cannot add components while in space.");
 			if(this.space_object) throw new Error("Cannot re-initialize");
@@ -29,13 +31,18 @@ package {
 			
 		}
 		
-		internal function collide(other:SpaceObject):void {
-		}
-		
-		protected function require(component:Class):* {
+		protected final function require(component:Class):* {
 			if(m_initialized) throw new Error("Can't add components after initialization");
 			return space_object.add_controller(component);
 		}
+		
+		protected final function add_tag(tag:String):void {
+			tags[tag] = tag;
+		}
+		
+		internal function collide(other:SpaceObject):void {
+		}
+		
 		
 		protected function init():void {}
 	}
