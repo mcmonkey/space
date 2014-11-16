@@ -12,8 +12,9 @@ package {
 		public static const DISPLAY_RADIUS_RATIO:Number = 1;
 		
 		
-		public static function unit_to_pixel(units:Number):Number {
-			return DISPLAY_RADIUS_RATIO * units;
+		public static function resource_to_pixel(units:Number):Number {
+			units = Math.max(0, units);
+			return DISPLAY_RADIUS_RATIO * Math.sqrt(units);
 		}
 		
 		
@@ -21,9 +22,7 @@ package {
 			
 		private var m_needs_redraw:Boolean = false;
 		
-		private var radius:Number;
-		
-		private var resources_left:Number = 1000;
+		public var resources_left:Number = 1000;
 		
 		public var position:PositionData;	
 		
@@ -54,7 +53,7 @@ package {
 		}
 		
 		public function pixel_radius():Number {
-			return unit_to_pixel(radius);
+			return resource_to_pixel(resources_left);
 		}
 		
 		public function request_redraw():void {
@@ -63,8 +62,7 @@ package {
 		
 		private function redraw():void {
 			var pix_rad:Number = pixel_radius();
-					
-			
+								
 			var color:uint = 0xAAAAAA;
 			with(shape.graphics) {
 				clear();
@@ -85,9 +83,6 @@ package {
 		public function on_model_update():void {
 			if(resources_left <= 0) {
 				space_object.destroy();
-				radius = 0;
-			} else {
-				radius = Math.sqrt(resources_left);
 			}
 			
 			request_redraw();

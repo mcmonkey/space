@@ -51,14 +51,14 @@ package {
 		}
 		private function generate_resource_nodes():void {
 			var resources:Vector.<ResourceNode> = new Vector.<ResourceNode>();
-			for(var i:int = 0; i < 10; i++) {
+			for(var i:int = 0; i < 35; i++) {
 				var tries:int = 10;
 				try_loop:
 				while(tries-- > 0) {
-					var r:Number = Math.random() * 100 + 25;
+					var r:Number = Math.random() * 1000 + 25;
 					var x:int = Math.random() * stage.stageWidth;
 					var y:int = Math.random() * stage.stageHeight;
-					var pixel_r:Number = DisplayPlanet.unit_to_pixel(r);
+					var pixel_r:Number = ResourceNode.resource_to_pixel(r);
 					for each(var existing_resource:ResourceNode in resources) {
 						var dx:Number = x - existing_resource.position.position.x;
 						var dy:Number = y - existing_resource.position.position.y;
@@ -71,6 +71,7 @@ package {
 					
 					var object:SpaceObject = new SpaceObject();
 					var resource:ResourceNode = object.add_controller(ResourceNode);
+					resource.resources_left = r;
 					
 					resource.position.position.x = x;
 					resource.position.position.y = y;
@@ -84,12 +85,12 @@ package {
 		
 		private function on_click(event:MouseEvent):void {
 			for(var i:int = 0; i < 1; i++) {
-				//var object:SpaceObject = new SpaceObject();
-				//var gun:DisplayGun = object.add_controller(DisplayGun);
-				//gun.newton.position.x = stage.mouseX;
-				//gun.newton.position.y = stage.mouseY;
+				var object:SpaceObject = new SpaceObject();
+				var nexus:FactionNexus = object.add_controller(FactionNexus);
+				nexus.position.position.x = stage.mouseX;
+				nexus.position.position.y = stage.mouseY;
 				
-				//m_space.add_space_object(object);
+				m_space.add_space_object(object);
 				
 			}
 		}

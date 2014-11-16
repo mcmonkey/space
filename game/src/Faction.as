@@ -6,15 +6,12 @@ package {
 	import flash.geom.Point;
 	import flash.system.System;
 	
-	public class Faction  {
-		public var game:Game;
-		
+	public class Faction  {		
 		public var color:uint;
 		
 		public var objects:Vector.<FactionOwned> = new Vector.<FactionOwned>();
 				
-		public function Faction(game:Game) {
-			this.game = game;
+		public function Faction() {
 			color = Math.random() * uint.MAX_VALUE;
 		}
 		
