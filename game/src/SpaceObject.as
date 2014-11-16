@@ -10,6 +10,18 @@ package {
 		
 		public static const EVENT_REMOVED_FROM_SPACE:String = "removed_from_space";
 		
+		public static function construct( ... components):* {
+			var result:*;
+			var object:SpaceObject = new SpaceObject();
+			for each(var type:Class in components) {
+				var component:* = object.add_controller(type);
+				if(!result) {
+					result = component;
+				}
+			}
+			return component;
+		}
+		
 		private var m_space:Space = null;
 		
 		private var m_controllers:Dictionary = new Dictionary();

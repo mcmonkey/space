@@ -7,6 +7,10 @@ package {
 		
 		protected var space_object:SpaceObject;
 		
+		public function get object():SpaceObject {
+			return space_object;
+		}
+		
 		private var m_initialized:Boolean = false;
 		
 		internal var tags:Dictionary = new Dictionary();
