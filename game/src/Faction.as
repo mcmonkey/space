@@ -11,9 +11,12 @@ package {
 		
 		public var color:uint;
 		
+		public var objects:Vector.<FactionOwned> = new Vector.<FactionOwned>();
+				
 		public function Faction(game:Game) {
 			this.game = game;
 			color = Math.random() * uint.MAX_VALUE;
 		}
+		
 	}
 }
