@@ -9,7 +9,7 @@ package {
 		
 		internal final function init_internal(space_object:SpaceObject):void {
 			if(space_object.space) throw new Error("Cannot add components while in space.");
-			if(space_object) throw new Error("Cannot re-initialize");
+			if(this.space_object) throw new Error("Cannot re-initialize");
 			
 			this.space_object = space_object;
 			
