@@ -49,14 +49,14 @@ package {
 				m_colliders.push(space_object);
 			}
 			
-			for each(var tag:String in space_object.tags) {
+			for each(var tag:* in space_object.tags) {
 				DictionaryUtil.add_or_create(tags, tag, Class(Vector.<SpaceObject>)).push(space_object);
 			}
 			
 			space_object.set_space(this);
 		}
 		
-		public function get_by_tag(tag:String):Vector.<SpaceObject> {
+		public function get_by_tag(tag:*):Vector.<SpaceObject> {
 			return tags[tag];
 		}
 		

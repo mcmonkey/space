@@ -36,7 +36,7 @@ package {
 			return space_object.add_controller(component);
 		}
 		
-		protected final function add_tag(tag:String):void {
+		protected final function add_tag(tag:*):void {
 			tags[tag] = tag;
 		}
 		
