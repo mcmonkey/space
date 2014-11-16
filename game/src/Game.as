@@ -47,10 +47,10 @@ package {
 			m_space = new Space(m_space_pallet);
 			
 			
-			generate_planets();
+			generate_resource_nodes();
 		}
-		private function generate_planets():void {
-			var planets:Vector.<DisplayPlanet> = new Vector.<DisplayPlanet>();
+		private function generate_resource_nodes():void {
+			var resources:Vector.<ResourceNode> = new Vector.<ResourceNode>();
 			for(var i:int = 0; i < 10; i++) {
 				var tries:int = 10;
 				try_loop:
@@ -59,10 +59,10 @@ package {
 					var x:int = Math.random() * stage.stageWidth;
 					var y:int = Math.random() * stage.stageHeight;
 					var pixel_r:Number = DisplayPlanet.unit_to_pixel(r);
-					for each(var existing_planet:DisplayPlanet in planets) {
-						var dx:Number = x - existing_planet.newton.position.x;
-						var dy:Number = y - existing_planet.newton.position.y;
-						var distance:Number = pixel_r + existing_planet.pixel_radius(); 
+					for each(var existing_resource:ResourceNode in resources) {
+						var dx:Number = x - existing_resource.position.position.x;
+						var dy:Number = y - existing_resource.position.position.y;
+						var distance:Number = pixel_r + existing_resource.pixel_radius(); 
 						if((dx * dx) + (dy * dy) < (distance * distance)) {
 							continue try_loop;
 						}
@@ -70,15 +70,12 @@ package {
 					tries = -1;
 					
 					var object:SpaceObject = new SpaceObject();
-					var planet:DisplayPlanet = object.add_controller(DisplayPlanet);
+					var resource:ResourceNode = object.add_controller(ResourceNode);
 					
-					planet.radius = r
-					planet.well.mass = r * r * 5;
+					resource.position.position.x = x;
+					resource.position.position.y = y;
 					
-					planet.newton.position.x = x;
-					planet.newton.position.y = y;
-					
-					planets.push(planet);
+					resources.push(resource);
 					m_space.add_space_object(object);
 				}
 			}
