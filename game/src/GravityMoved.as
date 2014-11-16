@@ -1,6 +1,7 @@
 package {
 	
 	import flash.geom.Point;
+	import util.CollisionPositionInfo;
 	
 	public class GravityMoved extends SpaceComponent implements IModelComponent {
 	
@@ -22,26 +23,13 @@ package {
 		
 		override internal function collide(other:SpaceObject):void {
 			var well:GravityWell = other.get_controller(GravityWell);
-			var other_newton:NewtonData = other.get_controller(NewtonData);
+
+			var info:CollisionPositionInfo = PositionData.collide(space_object, other);
 			
-			var d_pos_x:Number = other_newton.position.x - newton.position.x;
-			var d_pos_y:Number = other_newton.position.y - newton.position.y;
+			var force:Number = G * ( well.mass * this.mass ) / info.distance_squared;
 			
-			var dx:Number = d_pos_x;
-			var dy:Number = d_pos_y;
-			dx = dx * dx;
-			dy = dy * dy;
-			
-			var r2:Number = dx + dy;
-			var dist:Number = Math.sqrt(r2);
-			
-			dx = d_pos_x / dist;
-			dy = d_pos_y / dist;
-			
-			var force:Number = G * ( well.mass * this.mass ) / r2;
-			
-			net_force.x += dx * force;
-			net_force.y += dy * force;
+			net_force.x += info.delta_position.x / info.distance * force;
+			net_force.y += info.delta_position.y / info.distance * force;
 		}
 		
 		public function on_model_update():void {

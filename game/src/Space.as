@@ -5,6 +5,7 @@ package {
 	import flash.events.Event;
 	import flash.geom.Point;
 	import flash.utils.Dictionary;
+	import util.*;
 	
 	public class Space {
 		
