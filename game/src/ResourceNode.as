@@ -37,9 +37,12 @@ package {
 			position = require(PositionData);
 			var id:int = require(Obstacle).id;
 			var txt:TextField = new TextField();
+			txt.selectable = false;
 			sprite.addChild(shape);
 			sprite.addChild(txt);
 			txt.text = id.toString();
+			txt.x = -txt.textWidth / 2;
+			txt.y = -txt.textHeight / 2;
 			
 			request_redraw();
 			space_object.addEventListener(SpaceObject.EVENT_ADDED_TO_SPACE, added);

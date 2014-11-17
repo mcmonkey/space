@@ -24,6 +24,7 @@ package {
 			stage.scaleMode = StageScaleMode.NO_SCALE;
 			
 			stage.addEventListener(MouseEvent.CLICK, on_click);
+			
 			m_text.multiline = true;
 			m_text.selectable = false;
 			m_text.height = stage.stageHeight;
@@ -51,7 +52,7 @@ package {
 		}
 		private function generate_resource_nodes():void {
 			var resources:Vector.<ResourceNode> = new Vector.<ResourceNode>();
-			for(var i:int = 0; i < 100; i++) {
+			for(var i:int = 0; i < 500; i++) {
 				var tries:int = 10;
 				try_loop:
 				while(tries-- > 0) {
@@ -82,11 +83,15 @@ package {
 			}
 		}
 		
+		private var m_faction:Faction = new Faction();
 		
 		private function on_click(event:MouseEvent):void {
 			for(var i:int = 0; i < 1; i++) {
+				if(event.altKey) m_faction.second_color = uint.MAX_VALUE * Math.random();
 				var object:SpaceObject = new SpaceObject();
-				var nexus:FactionNexus = object.add_controller(FactionNexus);
+				var nexus:ConstructionDrone = object.add_controller(ConstructionDrone);
+				nexus.faction.faction = m_faction;
+				
 				nexus.position.position.x = stage.mouseX;
 				nexus.position.position.y = stage.mouseY;
 				
