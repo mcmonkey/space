@@ -49,6 +49,9 @@ package {
 		internal function collide(other:SpaceObject):void {
 		}
 		
+		internal function added(space:Space):void {}
+		
+		internal function removed(space:Space):void {}
 		
 		protected function init():void {}
 	}

@@ -64,6 +64,7 @@ package {
 		internal function set_space(value:Space):void {
 			
 			var palette:DisplayObject;
+			var comp:SpaceComponent;
 			
 			if(m_space) {
 				dispatchEvent(new Event(EVENT_REMOVED_FROM_SPACE));
@@ -72,19 +73,25 @@ package {
 						palette.parent.removeChild(palette);
 					}
 				}
+				for each(comp in m_controllers) {
+					comp.removed(m_space);
+				}
 			}
 			
 			m_space = value;
 			
-			for each(var visual:IVisualComponent in visuals) {
-				palette = visual.get_palette();
-				if(palette) {
-					palettes.push(palette);
-					m_space.palette.addChild(palette);
-				}
-			}
 			if(m_space) {
 				dispatchEvent(new Event(EVENT_ADDED_TO_SPACE));
+				for each(var visual:IVisualComponent in visuals) {
+					palette = visual.get_palette();
+					if(palette) {
+						palettes.push(palette);
+						m_space.palette.addChild(palette);
+					}
+				}
+				for each(comp in m_controllers) {
+					comp.added(m_space);
+				}
 			}
 		}
 		
