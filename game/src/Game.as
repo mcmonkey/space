@@ -48,56 +48,14 @@ package {
 			m_space = new Space(m_space_pallet);
 			
 			
-			generate_resource_nodes();
 		}
 		private function generate_resource_nodes():void {
-			var resources:Vector.<ResourceNode> = new Vector.<ResourceNode>();
-			for(var i:int = 0; i < 500; i++) {
-				var tries:int = 10;
-				try_loop:
-				while(tries-- > 0) {
-					var r:Number = Math.random() * 1000 + 25;
-					var x:int = Math.random() * stage.stageWidth;
-					var y:int = Math.random() * stage.stageHeight;
-					var pixel_r:Number = ResourceNode.resource_to_pixel(r);
-					for each(var existing_resource:ResourceNode in resources) {
-						var dx:Number = x - existing_resource.position.position.x;
-						var dy:Number = y - existing_resource.position.position.y;
-						var distance:Number = pixel_r + existing_resource.pixel_radius(); 
-						if((dx * dx) + (dy * dy) < (distance * distance)) {
-							continue try_loop;
-						}
-					}
-					tries = -1;
-					
-					var object:SpaceObject = new SpaceObject();
-					var resource:ResourceNode = object.add_controller(ResourceNode);
-					resource.resources_left = r;
-					
-					resource.position.position.x = x;
-					resource.position.position.y = y;
-					
-					resources.push(resource);
-					m_space.add_space_object(object);
-				}
-			}
+		
 		}
 		
-		private var m_faction:Faction = new Faction();
 		
 		private function on_click(event:MouseEvent):void {
-			for(var i:int = 0; i < 1; i++) {
-				if(event.altKey) m_faction.second_color = uint.MAX_VALUE * Math.random();
-				var object:SpaceObject = new SpaceObject();
-				var nexus:ConstructionDrone = object.add_controller(ConstructionDrone);
-				nexus.faction.faction = m_faction;
-				
-				nexus.position.position.x = stage.mouseX;
-				nexus.position.position.y = stage.mouseY;
-				
-				m_space.add_space_object(object);
-				
-			}
+			
 		}
 	}
 }
