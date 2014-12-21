@@ -11,11 +11,11 @@ package {
 		
 		public static const G:Number = 1.0;
 		
-		public function get pallet():Sprite {
-			return m_draw_pallet;
+		public function get palette():Sprite {
+			return m_draw_palette;
 		}
 		
-		internal var m_draw_pallet:Sprite = null;
+		internal var m_draw_palette:Sprite = null;
 		
 		internal var m_all_objects:Vector.<SpaceObject> = new Vector.<SpaceObject>();
 		
@@ -27,9 +27,9 @@ package {
 				
 		internal var tags:Dictionary = new Dictionary();
 		
-		public function Space(draw_pallet:Sprite) {
-			m_draw_pallet = draw_pallet;
-			m_draw_pallet.addEventListener(Event.EXIT_FRAME, on_frame);
+		public function Space(draw_palette:Sprite) {
+			m_draw_palette = draw_palette;
+			m_draw_palette.addEventListener(Event.EXIT_FRAME, on_frame);
 		}
 		
 		public function add_space_object(space_object:SpaceObject):void {
@@ -62,8 +62,6 @@ package {
 		}
 		
 		private function on_frame(event:*):void {
-			
-			
 			for each(var collider:SpaceObject in m_colliders) {
 				for(var key:uint in  m_collision_lists) {
 					if( (key & collider.collides_with) != 0) {

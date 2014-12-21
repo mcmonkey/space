@@ -3,6 +3,7 @@ package {
 	import flash.geom.Point;
 	import flash.events.*;
 	import flash.utils.Dictionary;
+	import flash.display.DisplayObject;
 	
 	public class SpaceObject extends EventDispatcher {
 	
@@ -32,6 +33,8 @@ package {
 		
 		internal var models:Vector.<IModelComponent> = new Vector.<IModelComponent>();
 		
+		internal var palettes:Vector.<DisplayObject> =  new Vector.<DisplayObject>();
+		
 		public var collision_state:uint;
 		
 		public var collides_with:uint;
@@ -59,10 +62,27 @@ package {
 		}
 				
 		internal function set_space(value:Space):void {
+			
+			var palette:DisplayObject;
+			
 			if(m_space) {
 				dispatchEvent(new Event(EVENT_REMOVED_FROM_SPACE));
+				for each(palette in palettes) {
+					if(palette && palette.parent) {
+						palette.parent.removeChild(palette);
+					}
+				}
 			}
+			
 			m_space = value;
+			
+			for each(var visual:IVisualComponent in visuals) {
+				palette = visual.get_palette();
+				if(palette) {
+					palettes.push(palette);
+					m_space.palette.addChild(palette);
+				}
+			}
 			if(m_space) {
 				dispatchEvent(new Event(EVENT_ADDED_TO_SPACE));
 			}
