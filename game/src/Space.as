@@ -57,6 +57,19 @@ package {
 			return tags[tag];
 		}
 		
+		public function get_first_by_tag(tag:*):* {
+			var result:*;
+			
+			var list:Vector.<SpaceObject> = tags[tag];
+			if(list && list.length > 0) {
+				result = list[0];
+				if(result && tag is Class) {
+					result = result.get_controller(tag);
+				}
+			}
+			return result;
+		}
+		
 		public function destroy(space_object:SpaceObject):void {
 			m_destroyed_objects[space_object] = true;
 		}

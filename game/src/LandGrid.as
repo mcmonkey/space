@@ -1,7 +1,9 @@
 package {
 
 	import flash.geom.Point;
+	import flash.geom.Rectangle;
 	import flash.display.*;
+	import flash.text.TextField;
 	
 	public class LandGrid extends SpaceComponent implements IVisualComponent {
 		
@@ -17,6 +19,8 @@ package {
 
 		private var _grid:Vector.<GridSpace> = null;
 		
+		private var _grid_pos:Point = new Point();
+		
 		public function set_size(width:int, height:int, size:Number, fertility_seed:Number):void {
 			_width = width;
 			_width_max = _width - 1;
@@ -31,12 +35,13 @@ package {
 				fert = Math.random();
 			
 				_grid[i] = new GridSpace();
-				_grid[i].fertility = Number(fert);
+				_grid[i].fertility = fert
 			}
 			
 			for each(var node:PopulationNode in _nodes) {
 				add_to_grid(node);
 			}
+			
 		}
 		
 		public function add_node(node:PopulationNode):void {
@@ -45,11 +50,61 @@ package {
 		}
 		
 		private function add_to_grid(node:PopulationNode):void {
-			var x:int = clamp(node.position.x / _size, _width_max);
-			var y:int = clamp(node.position.y / _size, _height_max);
-			var index:int = y * _width + x;
+			get_grid_p(node.position)._nodes.push(node);
+			trace(grid_index_p(node.position), _grid_pos);
+			_redraw = true;
+		}
+		
+		private function remove_from_grid(node:PopulationNode):void {			
+			var list:Vector.<PopulationNode>;
+			var index:int;
 			
-			_grid[index]._nodes.push(node);
+			list = get_grid_p(node.position)._nodes;
+			index = list.indexOf(node);
+			if(index >= 0) { 
+				list.splice(index, 1); 
+			}
+			
+			list = _nodes;
+			index = list.indexOf(node);
+			if(index >= 0) { 
+				list.splice(index, 1);
+			}
+			_redraw = true;
+		}
+		
+		public function get_count(x:Number, y:Number):int {
+			return get_grid(x, y)._nodes.length;
+		}
+		
+		public function get_fertility(x:Number, y:Number):Number {
+			return get_grid(x, y).fertility;
+		}
+		
+		private function get_grid(x:Number, y:Number):GridSpace {
+			return _grid[grid_index(x, y)];
+		}
+		
+		private function get_grid_p(p:Point):GridSpace {
+			return _grid[grid_index(p.x, p.y)];
+		}
+		
+		private function grid_index(x:Number, y:Number):int {
+			grid_pos(x, y);
+			return _grid_pos.y * _width + _grid_pos.x;
+		}
+		
+		private function grid_index_p(p:Point):int {
+			return grid_index(p.x, p.y);
+		}
+		
+		private function grid_pos(x:Number, y:Number):void {
+			_grid_pos.x = int(clamp(x / _size, _width_max));
+			_grid_pos.y = int(clamp(y / _size, _height_max));
+		}
+		
+		private function grid_pos_p(p:Point):void {
+			grid_pos(p.x, p.y);
 		}
 		
 		public function clamp(val:Number, max:Number = 1, min:Number = 0):Number {
@@ -64,22 +119,35 @@ package {
 			return _sprite;
 		}
 		
+		
 		public function on_visual_update():void {
 			if(_redraw) {
-				with(_sprite.graphics) {
-					clear();
-					lineStyle(0x0, 1.0);
-					var i:int = 0;
+				
+				var text:TextField;
+				
+				while(_sprite.numChildren) _sprite.removeChildAt(_sprite.numChildren - 1);
+				_sprite.graphics.clear();
+				_sprite.graphics.lineStyle(1.0, 0xAAAAAA);
+				var i:int = 0;
+				for(var y:int = 0; y < _height; y++) {
 					for(var x:int = 0; x < _width; x++) {
-						for(var y:int = 0; y < _height; y++) {
-							beginFill((uint(0xFF * (1.0 - 0.5 * _grid[i].fertility)) * 0x100) | 0x880088, .70);
-							drawRect(x * _size, y * _size, _size, _size);
-							endFill();
+						var grid:GridSpace = _grid[i];
+						text = new TextField();
+						text.text = grid._nodes.length.toString();
+						text.x = x * _size;
+						text.y = y * _size;
+						text.selectable = false;
 						
-							i++;
-						}
+						_sprite.addChild(text);
+						
+						_sprite.graphics.beginFill((uint(0xFF * (0.5 * (grid.fertility) + 0.5)) * 0x100) | 0x880088, .70);
+						_sprite.graphics.drawRect(x * _size, y * _size, _size, _size);
+						_sprite.graphics.endFill();
+													
+						i++;
 					}
 				}
+				
 				_redraw = false;
 			}
 		}
