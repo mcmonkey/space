@@ -47,15 +47,23 @@ package {
 			addChild(m_space_pallet);
 			m_space = new Space(m_space_pallet);
 			
+			generate_resource_nodes();
 			
 		}
-		private function generate_resource_nodes():void {
 		
+		private var _land:LandGrid;
+		
+		private function generate_resource_nodes():void {
+			var size:Number = 32;
+			_land = SpaceObject.construct(LandGrid);
+			_land.set_size(stage.stageWidth / size, stage.stageHeight / size, size, 12);
+			
+			m_space.add_space_object(_land.object);
 		}
 		
 		
 		private function on_click(event:MouseEvent):void {
-			
+			make_pallet();
 		}
 	}
 }
