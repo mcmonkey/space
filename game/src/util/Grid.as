@@ -21,6 +21,10 @@ package util {
 		
 		private var _type:Class;
 		
+		public function get size():Number { return _size;	}
+		public function get width():int { return _width; }
+		public function get height():int { return _height; }
+		
 		public function Grid(type:Class) {
 			_type = type;
 		}
@@ -39,11 +43,11 @@ package util {
 			}
 		}
 
-		private function get_grid(x:Number, y:Number):* {
+		public function get_grid(x:Number, y:Number):* {
 			return _grid[grid_index(x, y)];
 		}
 		
-		private function get_grid_p(p:Point):* {
+		public function get_grid_p(p:Point):* {
 			return _grid[grid_index(p.x, p.y)];
 		}
 		
