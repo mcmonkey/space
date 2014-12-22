@@ -43,30 +43,34 @@ package util {
 			}
 		}
 
-		public function get_grid(x:Number, y:Number):* {
-			return _grid[grid_index(x, y)];
+		public function get_grid(x:Number, y:Number, grid_indexing:Boolean = false):* {
+			return _grid[grid_index(x, y, grid_indexing)];
 		}
 		
-		public function get_grid_p(p:Point):* {
-			return _grid[grid_index(p.x, p.y)];
+		public function get_grid_p(p:Point, grid_indexing:Boolean = false):* {
+			return _grid[grid_index(p.x, p.y, grid_indexing)];
 		}
 		
-		private function grid_index(x:Number, y:Number):int {
-			grid_pos(x, y);
+		private function grid_index(x:Number, y:Number, grid_indexing:Boolean = false):int {
+			grid_pos(x, y, grid_indexing);
 			return _grid_pos.y * _width + _grid_pos.x;
 		}
 		
-		private function grid_index_p(p:Point):int {
-			return grid_index(p.x, p.y);
+		private function grid_index_p(p:Point, grid_indexing:Boolean = false):int {
+			return grid_index(p.x, p.y, grid_indexing);
 		}
 		
-		private function grid_pos(x:Number, y:Number):void {
-			_grid_pos.x = int(clamp(x / _size, _width_max));
-			_grid_pos.y = int(clamp(y / _size, _height_max));
+		private function grid_pos(x:Number, y:Number, grid_indexing:Boolean = false):void {
+			if(!grid_indexing) {
+				x /= _size;
+				y /= _size;
+			}
+			_grid_pos.x = int(clamp(x, _width_max));
+			_grid_pos.y = int(clamp(y, _height_max));
 		}
 		
-		private function grid_pos_p(p:Point):void {
-			grid_pos(p.x, p.y);
+		private function grid_pos_p(p:Point, grid_indexing:Boolean = false):void {
+			grid_pos(p.x, p.y, grid_indexing);
 		}
 		
 		public function clamp(val:Number, max:Number = 1, min:Number = 0):Number {

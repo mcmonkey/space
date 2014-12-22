@@ -54,7 +54,7 @@ package {
 		private var _land:LandGrid;
 		
 		private function generate_resource_nodes():void {
-			var size:Number = 128;
+			var size:Number = 8;
 			_land = SpaceObject.construct(LandGrid);
 			_land.set_size(stage.stageWidth / size, stage.stageHeight / size, size, 12);
 			
@@ -63,6 +63,8 @@ package {
 		
 		
 		private function on_click(event:MouseEvent):void {
+			make_pallet(); return;
+			
 			var node:FarmNode = SpaceObject.construct(FarmNode);
 			node.position.x = stage.mouseX;
 			node.position.y = stage.mouseY;
